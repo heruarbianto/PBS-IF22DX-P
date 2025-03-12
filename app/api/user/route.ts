@@ -43,7 +43,28 @@ if(view.length == 0){
 export const POST = async (request:NextRequest)=>{
  const {namaValue, usernameValue,passwordValue} = await request.json()
 
- const save = await prisma.tb_user.create({
+  // Cek data username tersedia/tidak
+  const cek = await prisma.tb_user.findMany({
+    where:{
+      username: usernameValue
+    }
+  });
+
+  // BUat kondisi jika data ditemukan
+  if(cek.length == 1){
+    // tampilkan respon api
+    return NextResponse.json(
+        {
+          metadata: {
+            error: 1,
+            message: "Gagal Disimpan!!! Username Sudah digunakan!!!",
+          },
+        },{
+            status:409
+        })
+}
+ 
+ await prisma.tb_user.create({
   data:{
     nama:namaValue,
     username: usernameValue,
