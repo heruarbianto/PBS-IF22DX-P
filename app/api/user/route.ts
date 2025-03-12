@@ -38,3 +38,26 @@ if(view.length == 0){
     }
   );
 };
+
+// BUat FUngsi Post
+export const POST = async (request:NextRequest)=>{
+ const {namaValue, usernameValue,passwordValue} = await request.json()
+
+ const save = await prisma.tb_user.create({
+  data:{
+    nama:namaValue,
+    username: usernameValue,
+    password: passwordValue
+  }
+ })
+
+//proses atau respon api
+
+return NextResponse.json({
+  metadata: {
+    error: 0,
+    message: 'Data User Berhasil Disimpan',
+    status:201
+  }
+},{status:201})
+}
