@@ -2,6 +2,8 @@ import { metadata } from "@/app/layout";
 import { PrismaClient } from "@prisma/client";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import { genSaltSync, hashSync } from "bcrypt-ts";
+
 
 // Buat variabel prisma
 const prisma = new PrismaClient();
@@ -42,6 +44,7 @@ if(view.length == 0){
 // BUat FUngsi Post
 export const POST = async (request:NextRequest)=>{
  const {namaValue, usernameValue,passwordValue} = await request.json()
+ const salt = genSaltSync(10);
 
   // Cek data username tersedia/tidak
   const cek = await prisma.tb_user.findMany({
@@ -68,7 +71,7 @@ export const POST = async (request:NextRequest)=>{
   data:{
     nama:namaValue,
     username: usernameValue,
-    password: passwordValue
+    password: hashSync(passwordValue, salt)
   }
  })
 
