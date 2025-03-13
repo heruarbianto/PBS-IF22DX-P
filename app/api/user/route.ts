@@ -54,7 +54,7 @@ export const POST = async (request:NextRequest)=>{
   });
 
   // BUat kondisi jika data ditemukan
-  if(cek.length == 1){
+  if(cek.length >= 1){
     // tampilkan respon api
     return NextResponse.json(
         {
@@ -67,6 +67,7 @@ export const POST = async (request:NextRequest)=>{
         })
 }
  
+
  await prisma.tb_user.create({
   data:{
     nama:namaValue,
