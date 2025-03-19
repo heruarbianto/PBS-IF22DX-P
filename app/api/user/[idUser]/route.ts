@@ -6,13 +6,14 @@ const prisma = new PrismaClient()
 
 // Buat service "Delete" (Parameter = id) tb_user
 
-export const DELETE = async(request:NextRequest,{params}:{params:{idUser:string}})=>{
+export const DELETE = async (request:NextRequest, props:{params: Promise<{idUser:string}>}) => {
+  const params = await props.params;
 
-      // Cek data username tersedia/tidak
+  // Cek data username tersedia/tidak
   const cek = await prisma.tb_user.findUnique({
     where:{
       id: Number(params.idUser)
-    }
+    },
   });
 
   // BUat kondisi jika data ditemukan
@@ -29,21 +30,22 @@ export const DELETE = async(request:NextRequest,{params}:{params:{idUser:string}
         })
 }
 
-    await prisma.tb_user.delete({
-    where :{
-        id: Number(params.idUser)
-    }
+  await prisma.tb_user.delete({
+  where :{
+      id: Number(params.idUser)
+  }
 })
 
-return NextResponse.json(
-    {
-      metadata: {
-        error: 0,
-        message: "Data Berhasil Dihapus!!!",
-      },
-    },{
-        status:200
-    })
-
-
+  return NextResponse.json(
+      {
+          metadata: {
+            error: 0,
+            message: "Berhasil Menghapus!!!",
+          },
+        dataUser:cek,
+      },{
+          status:200
+      })
 }
+
+// Buat service get buat detail data
