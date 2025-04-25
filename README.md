@@ -1,4 +1,5 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+DOKUMENTASI API https://documenter.getpostman.com/view/33034778/2sB2izDYj3
+
 
 ## Getting Started
 
