@@ -1,0 +1,28 @@
+.background-th
+{
+    background-color: #f7b5e8;
+}
+
+/* .frame-button-edit, .frame-button-delete
+{
+    color: #ffffff;
+    padding: 5px 10px;
+}
+
+.frame-button-edit
+{
+    background-color: rgb(10, 10, 216);
+}
+
+.frame-button-delete
+{
+    background-color: rgb(192, 14, 14);
+} */
+
+.text-ellipsis
+{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100px;
+    white-space: nowrap;
+}

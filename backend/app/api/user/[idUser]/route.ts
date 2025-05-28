@@ -1,9 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { genSaltSync, hashSync } from "bcrypt-ts";
+// import { genSaltSync, hashSync } from "bcrypt-ts";
+import { getResponseUserNotFound, prisma, setBcrypt } from "../../general";
 
 // Buat Variabel prisma
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 // Buat service "Delete" (Parameter = id) tb_user
 
@@ -26,11 +27,12 @@ export const DELETE = async (request:NextRequest, props:{params: Promise<{idUser
         {
           metadata: {
             error: 1,
-            message: "Gagal Dihapus!!! Id User Tidak Ditemukan!!!",
+            message: "ID Parameter Harus Angka",
           },
         },{
-          status:404
+            status:200
         })
+    
       }
       
       await prisma.tb_user.delete({
@@ -63,7 +65,6 @@ return NextResponse.json(
 }
 
 // Buat service get buat detail data
-
 export const GET = async(request:NextRequest, props:{params: Promise<{idUser:string}>}) => {
   
   try{
@@ -79,15 +80,7 @@ export const GET = async(request:NextRequest, props:{params: Promise<{idUser:str
   // BUat kondisi jika data ditemukan
   if(!cek){
     // tampilkan respon api
-    return NextResponse.json(
-        {
-          metadata: {
-            error: 1,
-            message: "Gagal Ditampilkan!!! Id User Tidak Ditemukan!!!",
-          },
-        },{
-            status:404
-        })
+    return getResponseUserNotFound();
 }
 
 return NextResponse.json(
@@ -120,7 +113,7 @@ export const PUT = async(request:NextRequest, props:{params: Promise<{idUser:str
   try{
     const {namaValue, usernameValue,passwordValue} = await request.json()
     const params = await props.params;
-    const salt = genSaltSync(10);
+    // const salt = genSaltSync(10);
     
   // Cek data username tersedia/tidak
   const cek = await prisma.tb_user.findUnique({
@@ -136,7 +129,7 @@ export const PUT = async(request:NextRequest, props:{params: Promise<{idUser:str
         {
           metadata: {
             error: 1,
-            message: "Gagal Update!!! Id User Tidak Ditemukan!!!",
+            message: `Update gagal! ${process.env.USER_NOT_FOUND_MESSAGE}`,
           },
         },{
             status:404
@@ -174,7 +167,7 @@ const updateUser = await prisma.tb_user.update({
   data: {
     nama: namaValue,
     username: usernameValue,
-    password: hashSync(passwordValue, salt)
+    password: setBcrypt(passwordValue)
   },
 })
 

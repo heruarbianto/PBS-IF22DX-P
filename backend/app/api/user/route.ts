@@ -1,30 +1,24 @@
 import { metadata } from "@/app/layout";
-import { PrismaClient } from "@prisma/client";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
-import { genSaltSync, hashSync } from "bcrypt-ts";
+// import { genSaltSync, hashSync } from "bcrypt-ts";
+import { getResponseUserNotFound, prisma, setBcrypt } from "../general";
 
 
-// Buat variabel prisma
-const prisma = new PrismaClient();
 
 // Buat fungsi get
-export const GET = async () => {
+export const GET = async (request:NextRequest) => {
     // ambil data dari database
-  const view = await prisma.tb_user.findMany({});
+  const view = await prisma.tb_user.findMany({
+    // where:{
+    //   username: "..."
+    // }
+  });
 
 // jika data tidak ada 
 if(view.length == 0){
     // tampilkan respon api
-    return NextResponse.json(
-        {
-          metadata: {
-            error: 1,
-            message: "Data User Tidak Ditemukan",
-          },
-        },{
-            status:404
-        })
+    return getResponseUserNotFound()
 }
 // tampilkan respon api
   return NextResponse.json(
@@ -44,7 +38,7 @@ if(view.length == 0){
 // BUat FUngsi Post
 export const POST = async (request:NextRequest)=>{
  const {namaValue, usernameValue,passwordValue} = await request.json()
- const salt = genSaltSync(10);
+//  const salt = genSaltSync(10);
 
   // Cek data username tersedia/tidak
   const cek = await prisma.tb_user.findMany({
@@ -72,7 +66,7 @@ export const POST = async (request:NextRequest)=>{
   data:{
     nama:namaValue,
     username: usernameValue,
-    password: hashSync(passwordValue, salt)
+    password: setBcrypt(passwordValue)
   }
  })
 
