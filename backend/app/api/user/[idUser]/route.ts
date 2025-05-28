@@ -159,17 +159,28 @@ if(cekUsername.length >= 1){
           status:409
       })
 }
-
-const updateUser = await prisma.tb_user.update({
-  where: {
-    id: Number(params.idUser),
-  },
-  data: {
-    nama: namaValue,
-    username: usernameValue,
-    password: setBcrypt(passwordValue)
-  },
-})
+if(passwordValue!="*****"){
+  await prisma.tb_user.update({
+    where: {
+      id: Number(params.idUser),
+    },
+    data: {
+      nama: namaValue,
+      username: usernameValue,
+      password: setBcrypt(passwordValue)
+    },
+  })
+} else{
+  await prisma.tb_user.update({
+    where: {
+      id: Number(params.idUser),
+    },
+    data: {
+      nama: namaValue,
+      username: usernameValue,
+    },
+  })
+}
 
 return NextResponse.json(
   {
@@ -177,12 +188,11 @@ return NextResponse.json(
       error: 0,
       message: "Berhasil DIUPDATE!!!",
     },
-    dataUser:updateUser,
   },{
     status:200
   })
 
-  }catch(e:any){
+}catch(e:any){
     return NextResponse.json(
       {
         metadata: {
