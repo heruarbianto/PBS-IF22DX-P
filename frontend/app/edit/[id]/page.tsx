@@ -16,6 +16,9 @@ export default function EditUser({ params }: { params: { id: string } }) {
   const [erorNamaVisible, seterorNamaVisible] = useState(false);
   const [erorUsernameVisible, seterorUsernameVisible] = useState(false);
   const [erorPasswordVisible, seterorpasswordVisible] = useState(false);
+  const [erorNamamsg, seterorNamamsg] = useState("");
+  const [erorUsernamemsg, seterorUsernamemsg] = useState("");
+  const [erorPasswordmsg, seterorpasswordmsg] = useState("");
 
   const setReload = () => {
     location.href = "/";
@@ -44,7 +47,7 @@ export default function EditUser({ params }: { params: { id: string } }) {
         }else{
             dataNama.current!.value = Response.data.dataUser.nama
             dataUsername.current!.value = Response.data.dataUser.username
-            dataPassword.current!.value = Response.data.dataUser.password
+            dataPassword.current!.value = "*****"
         }
       })
   }
@@ -90,16 +93,20 @@ export default function EditUser({ params }: { params: { id: string } }) {
   useEffect(() => {
     getDetailData(params.id);
     // seterorNamaVisible(false)
-    if (errMsgNama.current) {
-      errMsgNama.current.innerHTML = "Nama User Harus Diisi !";
-    }
-    if (errMsgUserName.current) {
-      errMsgUserName.current.innerHTML = "Username Harus Diisi !";
-    }
-    if (errMsgPassword.current) {
-      errMsgPassword.current.innerHTML = "Password Harus Diisi !";
-    }
-  },[erorNamaVisible, erorPasswordVisible, erorUsernameVisible])
+    // if (errMsgNama.current) {
+    //   errMsgNama.current.innerHTML = "Nama User Harus Diisi !";
+    // }
+    // if (errMsgUserName.current) {
+    //   errMsgUserName.current.innerHTML = "Username Harus Diisi !";
+    // }
+    // if (errMsgPassword.current) {
+    //   errMsgPassword.current.innerHTML = "Password Harus Diisi !";
+    // }
+
+    seterorNamamsg("Nama User Wajib Diisi!!!")
+    seterorUsernamemsg("Username User Wajib Diisi!!!")
+    seterorpasswordmsg("Password User Wajib Diisi!!!")
+  },[])
 
 
   return (
@@ -116,7 +123,7 @@ export default function EditUser({ params }: { params: { id: string } }) {
         />
 
 {erorNamaVisible && (
-          <p ref={errMsgNama} className="label text-red-700"></p>
+          <p  className="label text-red-700">{erorNamamsg}</p>
         )}
 
       </fieldset>
@@ -130,7 +137,7 @@ export default function EditUser({ params }: { params: { id: string } }) {
           placeholder="Isi Username User"
         />
   {erorUsernameVisible && (
-          <p ref={errMsgUserName} className="label text-red-700"></p>
+          <p className="label text-red-700">{erorUsernamemsg}</p>
         )}
       </fieldset>
 
@@ -143,7 +150,7 @@ export default function EditUser({ params }: { params: { id: string } }) {
           placeholder="Isi Nama User"
         />
 {erorPasswordVisible && (
-          <p ref={errMsgPassword} className="label text-red-700"></p>
+          <p className="label text-red-700">{erorPasswordmsg}</p>
         )}
       </fieldset>
 
